@@ -57,8 +57,29 @@ const port = process.env.PORT || 8000;
 
 
 //=============================================
+// Self-ping to keep the bot alive on services like Railway/Render
+setInterval(() => {
+  axios.get(`http://localhost:${port}`).catch(() => { });
+}, 5 * 60 * 1000); // Pulse every 5 minutes
 
 async function connectToWA() {
+  // Session restoration logic
+  if (config.SESSION_ID && !fs.existsSync(path.join(sessionDir, 'creds.json'))) {
+    try {
+      console.log("Attempting to restore session from SESSION_ID...");
+      if (config.SESSION_ID.startsWith("http")) {
+        const { data } = await axios.get(config.SESSION_ID);
+        const sessionContent = typeof data === 'string' ? data : JSON.stringify(data);
+        fs.writeFileSync(path.join(sessionDir, 'creds.json'), sessionContent);
+      } else {
+        const base64Data = config.SESSION_ID.includes(':') ? config.SESSION_ID.split(':')[1] : config.SESSION_ID;
+        fs.writeFileSync(path.join(sessionDir, 'creds.json'), Buffer.from(base64Data, 'base64').toString());
+      }
+      console.log("✅ Session successfully restored!");
+    } catch (e) {
+      console.error("❌ Failed to restore session:", e.message);
+    }
+  }
   //mongo connect
 
 
@@ -99,7 +120,7 @@ async function connectToWA() {
     const { connection, lastDisconnect } = update;
     if (connection === "close") {
       if (
-        lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
+        lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
       ) {
         connectToWA();
       }
