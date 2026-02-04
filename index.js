@@ -6,7 +6,7 @@ const {
   getContentType,
   fetchLatestBaileysVersion,
   Browsers,
-} = require("baileys");
+} = require("@whiskeysockets/baileys");
 
 const l = console.log;
 const {
@@ -73,7 +73,7 @@ async function connectToWA() {
   const robin = makeWASocket({
     logger: P({ level: "silent" }),
     printQRInTerminal: false,
-    browser: Browsers.macOS("Firefox"),
+    browser: Browsers.ubuntu("Chrome"),
     syncFullHistory: true,
     auth: state,
     version,
