@@ -6,6 +6,7 @@ const {
   getContentType,
   fetchLatestBaileysVersion,
   Browsers,
+  makeCacheableSignalKeyStore,
 } = require("@whiskeysockets/baileys");
 
 const l = console.log;
@@ -35,11 +36,16 @@ const prefix = config.PREFIX;
 })();
 
 
-const ownerNumber = config.OWNER_NUM;
-
-// Create sessions directory if it doesn't exist
+// Create and Clean sessions directory
 if (!fs.existsSync(__dirname + "/sessions")) {
   fs.mkdirSync(__dirname + "/sessions");
+} else {
+  // If we aren't registered, clear old session files to prevent "Could not link" errors
+  if (!fs.existsSync(__dirname + "/sessions/creds.json")) {
+    fs.readdirSync(__dirname + "/sessions/").forEach(file => {
+      if (file !== 'creds.json') fs.unlinkSync(__dirname + "/sessions/" + file);
+    });
+  }
 }
 
 const express = require("express");
@@ -59,19 +65,24 @@ async function connectToWA() {
   const { state, saveCreds } = await useMultiFileAuthState(
     __dirname + "/sessions/"
   );
-  var { version } = await fetchLatestBaileysVersion();
+  const { version } = await fetchLatestBaileysVersion();
 
   const robin = makeWASocket({
-    logger: P({ level: "silent" }),
-    printQRInTerminal: false,
-    browser: ["Ubuntu", "Chrome", "20.0.04"],
-    syncFullHistory: true,
-    auth: state,
     version,
+    printQRInTerminal: false,
+    logger: P({ level: "silent" }),
+    browser: Browsers.ubuntu("Chrome"),
+    auth: {
+      creds: state.creds,
+      keys: makeCacheableSignalKeyStore(state.keys, P({ level: "silent" })),
+    },
+    generateHighQualityLinkPreview: true,
+    syncFullHistory: false, // Faster linking
+    markOnlineOnConnect: true,
   });
 
   if (!robin.authState.creds.registered) {
-    const phoneNumber = ownerNumber.replace(/[^0-9]/g, '');
+    const phoneNumber = config.OWNER_NUM.replace(/[^0-9]/g, '');
     if (phoneNumber) {
       setTimeout(async () => {
         let code = await robin.requestPairingCode(phoneNumber);
