@@ -11,7 +11,22 @@ RUN apt-get update && \
   libpango1.0-dev \
   libjpeg-dev \
   libgif-dev \
-  librsvg2-dev && \
+  librsvg2-dev \
+  libnss3 \
+  libatk1.0-0 \
+  libatk-bridge2.0-0 \
+  libcups2 \
+  libdrm2 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxext6 \
+  libxfixes3 \
+  libxrandr2 \
+  libgbm1 \
+  libasound2 \
+  libpangocairo-1.0-0 \
+  libxshmfence1 \
+  libxkbcommon0 && \
   apt-get upgrade -y && \
   rm -rf /var/lib/apt/lists/*
 
@@ -22,8 +37,8 @@ RUN npm install --legacy-peer-deps
 # Copy application code
 COPY . .
 
-# Expose port (if needed by Railway, usually picks up PORT env var)
+# Expose port
 EXPOSE 8000
 
-# Start command
-CMD ["npm", "start"]
+# Start command using pm2-runtime for better container support
+CMD ["npx", "pm2-runtime", "index.js", "--name", "hans-byte"]
