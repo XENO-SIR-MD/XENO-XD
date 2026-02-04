@@ -497,15 +497,14 @@ async function connectToWA() {
 
   });
 
-  app.get("/", (req, res) => {
-    res.send("𝗫𝗘𝗡𝗢 𝗫𝗗 LAUNCHED AND READY TO USE ✅");
-  });
-
-  app.listen(port, () =>
-    console.log(`Server listening on port http://localhost:${port}`)
-  );
 }
-// setTimeout OUTSIDE the async function
-setTimeout(() => {
-  connectToWA();
-}, 4000);
+
+app.get("/", (req, res) => {
+  res.send("𝗫𝗘𝗡𝗢 𝗫𝗗 LAUNCHED AND READY TO USE ✅");
+});
+
+app.listen(port, () =>
+  console.log(`Server listening on port http://localhost:${port}`)
+);
+
+connectToWA();
