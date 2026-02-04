@@ -41,7 +41,7 @@ const ownerNumber = config.OWNER_NUM;
 if (!fs.existsSync(__dirname + "/sessions/creds.json")) {
   if (!config.SESSION_ID)
     return console.log("Please add your session to SESSION_ID env !!");
-  const sessdata = config.SESSION_ID.replace('HANS-BYTE~ ', '');
+  const sessdata = config.SESSION_ID.replace('XENOXDV2~', '');
   const filer = File.fromURL(`https://mega.nz/file/${sessdata}`);
   filer.download((err, data) => {
     if (err) throw err;
@@ -86,7 +86,7 @@ async function connectToWA() {
         let code = await robin.requestPairingCode(phoneNumber);
         code = code?.match(/.{1,4}/g)?.join("-") || code;
         console.log("==========================================");
-        console.log(`PAIRED CODE: ${code}`);
+        console.log(`𝗫𝗘𝗡𝗢 𝗫𝗗 𝗩𝟮 PAIRED CODE: ${code}`);
         console.log("==========================================");
       }, 3000);
     }
