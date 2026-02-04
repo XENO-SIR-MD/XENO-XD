@@ -1,0 +1,6 @@
+node_modules
+/sessions
+/auth_info_baileys
+config.env
+*.db
+.env
