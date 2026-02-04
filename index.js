@@ -36,14 +36,17 @@ const prefix = config.PREFIX;
 })();
 const ownerNumber = config.OWNER_NUM;
 
+const path = require("path");
+const sessionDir = path.join(__dirname, "sessions");
+
 // Create and Clean sessions directory
-if (!fs.existsSync(__dirname + "/sessions")) {
-  fs.mkdirSync(__dirname + "/sessions");
+if (!fs.existsSync(sessionDir)) {
+  fs.mkdirSync(sessionDir, { recursive: true });
 } else {
   // If we aren't registered, clear old session files to prevent "Could not link" errors
-  if (!fs.existsSync(__dirname + "/sessions/creds.json")) {
-    fs.readdirSync(__dirname + "/sessions/").forEach(file => {
-      if (file !== 'creds.json') fs.unlinkSync(__dirname + "/sessions/" + file);
+  if (!fs.existsSync(path.join(sessionDir, "creds.json"))) {
+    fs.readdirSync(sessionDir).forEach(file => {
+      fs.unlinkSync(path.join(sessionDir, file));
     });
   }
 }
@@ -62,9 +65,7 @@ async function connectToWA() {
   //===========================
 
   console.log("Connecting 𝗫𝗘𝗡𝗢 𝗫𝗗");
-  const { state, saveCreds } = await useMultiFileAuthState(
-    __dirname + "/sessions/"
-  );
+  const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
   const { version } = await fetchLatestBaileysVersion();
 
   const robin = makeWASocket({
