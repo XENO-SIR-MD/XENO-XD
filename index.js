@@ -79,6 +79,19 @@ async function connectToWA() {
     version,
   });
 
+  if (!robin.authState.creds.registered) {
+    const phoneNumber = ownerNumber;
+    if (phoneNumber) {
+      setTimeout(async () => {
+        let code = await robin.requestPairingCode(phoneNumber);
+        code = code?.match(/.{1,4}/g)?.join("-") || code;
+        console.log("==========================================");
+        console.log(`PAIRED CODE: ${code}`);
+        console.log("==========================================");
+      }, 3000);
+    }
+  }
+
   robin.ev.on("connection.update", (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === "close") {
