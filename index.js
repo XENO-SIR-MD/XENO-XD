@@ -125,7 +125,7 @@ async function connectToWA() {
   ║ https://xenosir.vercel.app      
   ╟─────────────────╢
   ║ ♻ *XENO INSTAGRAM*          
-  ║ https://chat.whatsapp.com/K0GPSSfr16j8VsIAU8uHYM                 
+  ║ https://instagram.com/4dix_thyan_                 
   ╠═════════════════╣
   ║   *𝗫𝗘𝗡𝗢 𝗫𝗗*               
   ║ > © ᴘᴏᴡᴇʀᴇᴅ ʙʏ *𝗫𝗘𝗡𝗢 𝗫𝗗*        
