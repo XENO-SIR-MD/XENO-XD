@@ -34,7 +34,7 @@ const prefix = config.PREFIX;
   const { default: fetch } = await import('node-fetch');
   globalThis.fetch = fetch;
 })();
-
+const ownerNumber = config.OWNER_NUM;
 
 // Create and Clean sessions directory
 if (!fs.existsSync(__dirname + "/sessions")) {
@@ -118,7 +118,7 @@ async function connectToWA() {
   ║      𝗫𝗘𝗡𝗢 𝗫𝗗 X 𝐁𝐎𝐓           
   ║  SUCCESSFULLY CONNECTED ✅ 😍        
   ╠═════════════════╣
-  ║      • PREFIX: .            
+  ║      • PREFIX: ${config.PREFIX}            
   ╟─────────────────╢
   ║ ♻ *XENO SIR OFFICIAL*         
   ║ https://xenosir.vercel.app      
