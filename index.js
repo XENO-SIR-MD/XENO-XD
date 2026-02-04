@@ -64,14 +64,14 @@ async function connectToWA() {
   const robin = makeWASocket({
     logger: P({ level: "silent" }),
     printQRInTerminal: false,
-    browser: Browsers.ubuntu("Chrome"),
+    browser: ["Ubuntu", "Chrome", "20.0.04"],
     syncFullHistory: true,
     auth: state,
     version,
   });
 
   if (!robin.authState.creds.registered) {
-    const phoneNumber = ownerNumber;
+    const phoneNumber = ownerNumber.replace(/[^0-9]/g, '');
     if (phoneNumber) {
       setTimeout(async () => {
         let code = await robin.requestPairingCode(phoneNumber);
@@ -79,7 +79,7 @@ async function connectToWA() {
         console.log("╔══════════════════════════════════════╗");
         console.log(`║  𝗫𝗘𝗡𝗢 𝗫𝗗 𝗩𝟮 PAIRED CODE: ${code}  ║`);
         console.log("╚══════════════════════════════════════╝");
-      }, 3000);
+      }, 5000);
     }
   }
 
